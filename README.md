@@ -4,7 +4,7 @@ Explains](https://www.anthropic.com/claude-explains) as they were on June 6,
 
 Web access: [derludditus.github.io/ClaudePython](https://derludditus.github.io/ClaudePython/)
 
-Manus-created website:
-[hpwwjcqw.manus.space](https://hpwwjcqw.manus.space/)
+Manus-created website (updated with corrections):
+[uzziuakk.manus.space](https://uzziuakk.manus.space/)
 
  
