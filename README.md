@@ -15,7 +15,7 @@ window.location.replace('https://www.anthropic.com');
 </script>
 ```
 
-All the files are however still on the server and they can be retrieved e.g. with `wget`. The 129 files retrieved by me are the only ones about Python for which I had the URLs; they might be more of them. Should Anthropic restore the access to [Claude Explains](https://www.anthropic.com/claude-explains), everyone could access whatever else is there.
+All the files are, however, still on the server, and they can be retrieved, e.g., with `wget`. The 129 files retrieved by me are the only ones about Python for which I had the URLs; there might be more of them. Should Anthropic restore access to [Claude Explains](https://www.anthropic.com/claude-explains), everyone could access whatever else is there.
 
 Obviously, I stripped the files of all the garbage inserted there by Anthropic.
 
