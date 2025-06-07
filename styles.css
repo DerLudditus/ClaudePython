@@ -32,7 +32,7 @@ h1 a {
 
 /* Style inline image in h1 */
 h1 img.h1-icon {
-  height: 1.8em; /* Match h1 font size */
+  height: 1.4em; /* It has to be smaller than the font size because it's gonna be larger anyway */
   width: auto; /* Maintain aspect ratio */
   vertical-align: middle; /* Align with text */
   margin-right: 0.2em; /* Space between image and text */
