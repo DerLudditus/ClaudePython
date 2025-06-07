@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><title>How to use environment variables in Python</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&amp;family=Literata:wght@400;700&amp;family=Fira+Code:wght@400;700&amp;display=swap" rel="stylesheet" type="text/css" />
+  <link href="styles.css" rel="stylesheet" type="text/css" />
+</head><body id="top">
+  <script src="script.js"></script>
+<h1><a href="index.html">How to use environment variables in Python</a></h1><div><div><div><p>Environment variables provide a secure way to store sensitive configuration data outside your Python code. These variables live in your system's environment, allowing you to manage API keys, database credentials, and other settings without hardcoding them.</p><p>This guide covers practical techniques for working with environment variables in Python, with real-world examples and debugging tips. All code examples were created with <a href="https://claude.ai/">Claude</a>, an AI assistant built by Anthropic.</p><h2>Accessing environment variables with <code>os.environ</code></h2><pre><code>import os
+
+# Access an environment variable
+username = os.environ.get(&#x27;USER&#x27;)
+print(f&quot;Current user: {username}&quot;)</code></pre><pre><code>Current user: johndoe</code></pre><p>The <code>os.environ</code> module provides direct access to environment variables through a dictionary-like interface. While you could access variables directly with square bracket notation, the <code>.get()</code> method offers a safer approach by returning <code>None</code> instead of raising a <code>KeyError</code> when a variable doesn't exist.</p><p>Python's environment variables persist only during runtime and within the current process scope. This makes them ideal for:</p><ul><li>Storing sensitive credentials without exposing them in version control</li><li>Configuring different settings across development, staging, and production environments</li><li>Managing application behavior through external configuration</li></ul><h2>Basic environment variable operations</h2><p>Beyond the basic <code>.get()</code> method, Python's <code>os.environ</code> module offers several powerful ways to interact with and validate environment variables in your applications.</p><h3>Using <code>os.environ</code> as a dictionary</h3><pre><code>import os
+
+# Set a temporary environment variable
+os.environ[&#x27;APP_ENV&#x27;] = &#x27;development&#x27;
+print(f&quot;Environment: {os.environ[&#x27;APP_ENV&#x27;]}&quot;)</code></pre><pre><code>Environment: development</code></pre><p>The <code>os.environ</code> dictionary interface lets you directly modify environment variables during runtime. Setting a variable is as straightforward as using square bracket assignment: <code>os.environ['KEY'] = 'value'</code>.</p><ul><li>Changes only affect the current Python process</li><li>Variables reset when the program terminates</li><li>Square bracket notation raises <code>KeyError</code> if the key doesn't exist</li></ul><p>This approach works well for temporary configuration changes and testing scenarios. However, for persistent changes across sessions, you'll need to modify your system's environment variables through your operating system's interface.</p><h3>Using <code>os.getenv()</code> with default values</h3><pre><code>import os
+
+debug_mode = os.getenv(&#x27;DEBUG_MODE&#x27;, &#x27;False&#x27;)
+port = os.getenv(&#x27;PORT&#x27;, &#x27;8000&#x27;)
+print(f&quot;Debug mode: {debug_mode}, Port: {port}&quot;)</code></pre><pre><code>Debug mode: False, Port: 8000</code></pre><p><code>os.getenv()</code> provides a more flexible way to retrieve environment variables. Unlike <code>os.environ.get()</code>, it accepts a second parameter that serves as a fallback value when the requested variable doesn't exist.</p><ul><li>The first argument specifies the environment variable name you want to access</li><li>The second argument sets a default value that returns if the variable isn't found</li><li>This approach eliminates the need for additional error handling or conditional checks in your code</li></ul><p>In the example above, if <code>DEBUG_MODE</code> and <code>PORT</code> aren't set in the environment, Python will use <code>'False'</code> and <code>'8000'</code> as their respective default values. This pattern works particularly well for configuration settings that have sensible defaults.</p><h3>Checking if an environment variable exists</h3><pre><code>import os
+
+if &#x27;DATABASE_URL&#x27; in os.environ:
+    print(&quot;Database URL is set&quot;)
+else:
+    print(&quot;Database URL is not set&quot;)</code></pre><pre><code>Database URL is not set</code></pre><p>The <code>in</code> operator provides a straightforward way to verify if an environment variable exists before attempting to access it. This approach prevents potential errors that could crash your application.</p><ul><li>Using <code>in os.environ</code> returns <code>True</code> if the variable exists and <code>False</code> otherwise</li><li>This method works well for conditional logic where you need different behavior based on variable presence</li><li>It's more explicit than catching exceptions from failed dictionary access</li></ul><p>The example demonstrates a common pattern for checking database configurations. You can extend this pattern to provide fallback options or display helpful error messages when required variables are missing.</p><h2>Advanced environment variable techniques</h2><p>Building on these foundational techniques, Python offers powerful tools to manage environment variables through configuration files, type conversion, and temporary variable scoping.</p><h3>Using <code>python-dotenv</code> to load from <code>.env</code> files</h3><pre><code>from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Load variables from .env file
+api_key = os.getenv(&#x27;API_KEY&#x27;)
+print(f&quot;API key loaded: {&#x27;Yes&#x27; if api_key else &#x27;No&#x27;}&quot;)</code></pre><pre><code>API key loaded: No</code></pre><p>The <code>python-dotenv</code> package simplifies environment variable management by loading variables from a <code>.env</code> file into your Python environment. This approach keeps sensitive data like API keys and passwords in a separate file that you can exclude from version control.</p><ul><li>The <code>load_dotenv()</code> function reads key-value pairs from your <code>.env</code> file and adds them to <code>os.environ</code></li><li>After loading, you can access these variables using familiar methods like <code>os.getenv()</code></li><li>The package supports multiple environments by loading different <code>.env</code> files based on your configuration</li></ul><p>This pattern works especially well for development teams sharing project configurations while keeping their individual credentials private and secure.</p><h3>Converting environment variables to appropriate types</h3><pre><code>import os
+
+max_connections = int(os.getenv(&#x27;MAX_CONNECTIONS&#x27;, &#x27;5&#x27;))
+debug_enabled = os.getenv(&#x27;DEBUG&#x27;, &#x27;False&#x27;).lower() in (&#x27;true&#x27;, &#x27;1&#x27;, &#x27;t&#x27;)
+print(f&quot;Max connections: {max_connections}, Debug enabled: {debug_enabled}&quot;)</code></pre><pre><code>Max connections: 5, Debug enabled: False</code></pre><p>Environment variables always store values as strings. Converting them to appropriate Python data types ensures your application handles configuration values correctly. The example demonstrates two common type conversion patterns.</p><ul><li>The <code>int()</code> function converts the <code>MAX_CONNECTIONS</code> string value to an integer, with a default of 5 if the variable isn't set</li><li>For boolean flags, the code converts <code>DEBUG</code> to lowercase and checks if it matches common truth values like <code>'true'</code>, <code>'1'</code>, or <code>'t'</code></li></ul><p>This approach prevents type-related errors and provides consistent behavior across different environment configurations. Your application can now work with these values in their proper Python types instead of raw strings.</p><h3>Using temporary environment variables with <code>contextlib</code></h3><pre><code>import os
+from contextlib import contextmanager
+
+@contextmanager
+def set_temp_env(key, value):
+    old_value = os.environ.get(key)
+    os.environ[key] = value
+    try:
+        yield
+    finally:
+        if old_value is None:
+            del os.environ[key]
+        else:
+            os.environ[key] = old_value
+
+with set_temp_env(&#x27;TEMP_VAR&#x27;, &#x27;temporary&#x27;):
+    print(f&quot;Inside context: {os.environ[&#x27;TEMP_VAR&#x27;]}&quot;)
+print(f&quot;Outside context: {os.getenv(&#x27;TEMP_VAR&#x27;, &#x27;not set&#x27;)}&quot;)</code></pre><pre><code>Inside context: temporary
+Outside context: not set</code></pre><p>The <code>contextlib</code> module enables temporary environment variable management through Python's context manager pattern. The <code>set_temp_env</code> function creates a controlled scope where you can modify environment variables without affecting the broader system environment.</p><ul><li>The function stores the original value of the environment variable before making changes</li><li>Inside the <code>with</code> block, your temporary value takes effect</li><li>Once the block ends, Python automatically restores the original value or removes the variable if it didn't exist before</li></ul><p>This pattern proves especially useful for testing scenarios where you need to temporarily override configuration values. The <code>try/finally</code> block ensures proper cleanup even if errors occur during execution.</p><h3>Configuring application behavior with <code>os.environ</code></h3><p>Environment variables enable dynamic application configuration by letting you adjust settings like database connections and debug modes based on your deployment environment without modifying code.</p><pre><code>import os
+
+# Configure application based on environment
+env = os.environ.get(&#x27;APP_ENVIRONMENT&#x27;, &#x27;development&#x27;)
+if env == &#x27;production&#x27;:
+    debug = False
+    database_url = os.environ[&#x27;PROD_DB_URL&#x27;]
+else:
+    debug = True
+    database_url = os.environ.get(&#x27;DEV_DB_URL&#x27;, &#x27;sqlite:///dev.db&#x27;)
+    
+print(f&quot;Running in {env} mode&quot;)
+print(f&quot;Debug: {debug}, Database: {database_url}&quot;)</code></pre><p>This code demonstrates environment-based configuration management in Python applications. The <code>os.environ.get()</code> method checks for an <code>APP_ENVIRONMENT</code> variable and defaults to 'development' if not found. Based on this setting, the code configures two critical parameters:</p><ul><li>Debug mode toggles between enabled for development and disabled for production</li><li>Database URL selection adapts to the environment. Production requires an explicit URL while development allows a SQLite fallback</li></ul><p>The conditional logic creates a flexible system that automatically adjusts these settings. This pattern helps prevent accidental use of development configurations in production environments while maintaining convenient defaults for local development.</p><h3>Building a secure API client with <code>os.environ.get()</code></h3><p>The <code>create_api_client()</code> function demonstrates how to build a secure API client that manages sensitive credentials and configuration settings through environment variables while providing sensible defaults for non-critical parameters.</p><pre><code>import os
+import requests
+
+def create_api_client():
+    api_key = os.environ.get(&#x27;API_KEY&#x27;)
+    if not api_key:
+        raise ValueError(&quot;API_KEY environment variable is required&quot;)
+    
+    base_url = os.environ.get(&#x27;API_BASE_URL&#x27;, &#x27;https://api.example.com&#x27;)
+    timeout = int(os.environ.get(&#x27;API_TIMEOUT&#x27;, &#x27;30&#x27;))
+    
+    return f&quot;Client configured with URL: {base_url}, timeout: {timeout}s&quot;
+
+try:
+    client_info = create_api_client()
+    print(client_info)
+except ValueError as e:
+    print(f&quot;Error: {e}&quot;)</code></pre><p>This code creates a flexible API client configuration system that prioritizes security. The <code>create_api_client()</code> function requires an API key through environment variables. It will raise a <code>ValueError</code> if the key isn't present.</p><ul><li>The function retrieves essential settings like <code>API_KEY</code>, <code>API_BASE_URL</code>, and <code>API_TIMEOUT</code> from environment variables</li><li>It provides sensible defaults for the base URL and timeout settings</li><li>The <code>try-except</code> block gracefully handles missing API key errors</li></ul><p>The code demonstrates robust error handling and configuration management. It ensures critical credentials are properly set while maintaining flexibility for optional parameters.</p><h2>Common errors and challenges</h2><p>Working with environment variables in Python introduces several common pitfalls that can impact your application's stability and security.</p><h3>Handling <code>KeyError</code> when accessing non-existent variables</h3><p>Directly accessing environment variables with square bracket notation (<code>os.environ['KEY']</code>) can crash your application if the variable doesn't exist. The code below demonstrates this common pitfall that occurs when required configuration values are missing from the environment.</p><pre><code>import os
+
+# This will raise a KeyError if DATABASE_URL is not set
+database_url = os.environ[&#x27;DATABASE_URL&#x27;]
+print(f&quot;Connected to database at: {database_url}&quot;)</code></pre><p>The code attempts to directly access a missing environment variable using <code>os.environ['DATABASE_URL']</code>. This triggers Python's built-in error handling mechanism, which immediately halts program execution. The next code example demonstrates a more resilient approach.</p><pre><code>import os
+
+# Using get() with a default value prevents KeyError
+database_url = os.environ.get(&#x27;DATABASE_URL&#x27;, &#x27;sqlite:///default.db&#x27;)
+print(f&quot;Connected to database at: {database_url}&quot;)</code></pre><p>Using <code>os.environ.get()</code> with a default value provides a safer way to access environment variables. This method returns the default value when the requested variable doesn't exist instead of crashing your application with a <code>KeyError</code>.</p><ul><li>Always use <code>.get()</code> when the variable might not exist in the environment</li><li>Reserve direct dictionary access (<code>os.environ['KEY']</code>) for truly required variables where missing values should halt execution</li><li>Choose meaningful default values that won't cause issues downstream in your application</li></ul><p>Watch for this pattern especially in deployment scripts and configuration management code where environment variables often change between different systems.</p><h3>Type conversion issues with numeric environment variables</h3><p>Environment variables store all values as strings. This creates a common pitfall when working with numeric data. A direct mathematical operation on an environment variable string value triggers a <code>TypeError</code>. The code below demonstrates this issue when attempting to multiply a connection limit value.</p><pre><code>import os
+
+# Setting a numeric environment variable
+os.environ[&#x27;MAX_CONNECTIONS&#x27;] = &#x27;10&#x27;
+
+# This will cause an error if we try to use it directly in math operations
+max_connections = os.environ[&#x27;MAX_CONNECTIONS&#x27;]
+new_limit = max_connections * 2  # TypeError: can&#x27;t multiply sequence by non-int
+print(f&quot;New connection limit: {new_limit}&quot;)</code></pre><p>The error occurs because Python attempts to multiply a string value (<code>'10'</code>) by an integer (<code>2</code>). The string comes directly from <code>os.environ</code> without proper type conversion. Let's examine the corrected approach in the next code block.</p><pre><code>import os
+
+# Setting a numeric environment variable
+os.environ[&#x27;MAX_CONNECTIONS&#x27;] = &#x27;10&#x27;
+
+# Properly convert string to int before using in calculations
+max_connections = int(os.environ[&#x27;MAX_CONNECTIONS&#x27;])
+new_limit = max_connections * 2
+print(f&quot;New connection limit: {new_limit}&quot;)</code></pre><p>The solution explicitly converts the environment variable string to an integer using <code>int()</code> before performing mathematical operations. This prevents the <code>TypeError</code> that occurs when trying to multiply strings with numbers.</p><ul><li>Watch for this issue when working with numeric configuration values like timeouts, limits, or port numbers</li><li>Always validate and convert environment variables to appropriate data types before using them in calculations</li><li>Consider wrapping conversions in error handling to catch invalid string formats</li></ul><h3>Dealing with case sensitivity in environment variable names</h3><p>Environment variables in Python maintain their exact case sensitivity. A common error occurs when developers attempt to access variables with inconsistent capitalization. The <code>os.environ</code> dictionary strictly matches case, so <code>DB_PASSWORD</code> and <code>db_password</code> represent different variables.</p><pre><code>import os
+
+# Setting an environment variable
+os.environ[&#x27;DB_PASSWORD&#x27;] = &#x27;securepassword&#x27;
+
+# Attempting to retrieve with inconsistent casing (common mistake)
+password = os.environ.get(&#x27;db_password&#x27;)
+print(f&quot;Database password: {password}&quot;)  # Will print None</code></pre><p>The code fails because <code>os.environ.get('db_password')</code> searches for a lowercase variable name while the actual environment variable uses uppercase <code>DB_PASSWORD</code>. The case mismatch returns <code>None</code> instead of the stored value. Check out this corrected implementation:</p><pre><code>import os
+
+# Setting an environment variable
+os.environ[&#x27;DB_PASSWORD&#x27;] = &#x27;securepassword&#x27;
+
+# Use consistent casing when accessing environment variables
+password = os.environ.get(&#x27;DB_PASSWORD&#x27;)
+print(f&quot;Database password: {password}&quot;)</code></pre><p>The solution demonstrates proper case sensitivity handling when working with environment variables in Python. Using consistent casing between setting and retrieving variables prevents common access errors. The <code>os.environ</code> dictionary strictly matches case, so <code>DB_PASSWORD</code> and <code>db_password</code> are treated as entirely different variables.</p><ul><li>Establish and follow a consistent naming convention for environment variables across your codebase</li><li>Document your chosen convention in project guidelines to prevent team confusion</li><li>Consider using uppercase for all environment variables. This aligns with common Unix conventions</li></ul><p>Watch for this issue especially when working with configuration files or when multiple developers contribute to the same project. Case mismatches often surface during deployment when variables are set through different methods or platforms.</p></div></div></div><h2>FAQs</h2><div><div><h3>How do I check if an environment variable exists before using it?</h3><div><div><div><p>Environment variables store configuration data outside your code. To check if one exists, use <code>os.getenv()</code> in Python or <code>process.env</code> in Node.js. These methods return <code>None</code> or <code>undefined</code> for missing variables instead of raising errors.</p><p>This behavior lets you gracefully handle missing configurations. You can provide fallback values or display helpful error messages when required variables aren't set. Many frameworks automatically check for essential environment variables during startup to prevent runtime issues.</p></div></div></div></div></div><div><div><h3>What happens when I try to access an environment variable that doesn&#x27;t exist?</h3><div><div><div><p>When you try to access a nonexistent environment variable, most programming languages return <code>null</code> or an empty string instead of throwing an error. This behavior enables defensive programming by letting you check if a variable exists before using it.</p><p>Operating systems handle this gracefully because environment variables frequently change between environments. A missing variable shouldn't crash your application—instead, your code should implement appropriate fallback logic.</p></div></div></div></div></div><div><div><h3>Can I set environment variables from within my Python script?</h3><div><div><div><p>Yes, you can modify environment variables in Python using <code>os.environ</code>. This dictionary-like object lets you get, set, and delete environment variables during runtime. However, these changes only affect the current process and its child processes. They won't persist after your script ends.</p><p>The operating system isolates environment variables by process for security. When you set variables with <code>os.environ['KEY'] = 'value'</code>, Python updates the process environment table maintained by your OS. This isolation prevents one program from accidentally or maliciously affecting others.</p></div></div></div></div></div><div><div><h3>How do I provide a default value when getting an environment variable?</h3><div><div><div><p>The <code>os.getenv()</code> function accepts an optional second parameter that serves as the default value when an environment variable isn't found. For example, <code>os.getenv('API_KEY', 'default_key')</code> returns 'default_key' if API_KEY isn't set.</p><p>This pattern provides a safety net for your application, ensuring it can continue running even when expected environment variables are missing. You'll commonly use this approach when handling configuration values that might change between development and production environments.</p></div></div></div></div></div><div><div><h3>What&#x27;s the difference between using os.environ and os.getenv()?</h3><div><div><div><p>The key difference lies in how these Python functions handle missing environment variables. <code>os.environ</code> behaves like a dictionary and raises a <code>KeyError</code> when a variable doesn't exist. <code>os.getenv()</code> returns <code>None</code> by default—making it safer for checking optional variables.</p><p>While <code>os.environ</code> allows direct modification of environment variables during runtime, <code>os.getenv()</code> provides read-only access with an option to specify default values. This makes <code>os.getenv()</code> ideal for configuration management where graceful fallbacks matter.</p></div></div></div></div></div><h2>🏠</h2></body></html>
