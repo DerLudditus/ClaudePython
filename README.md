@@ -1,7 +1,7 @@
 This is an index of the small Python tutorials posted on [Claude Explains](https://www.anthropic.com/claude-explains) as they were on June 6,
 2025, and as they have been retrieved by an imperfect script.
 
-Anthropic has abruptly removed the access to the Claude Explain section of the website by modifying each hosted file at this time stamp:
+Anthropic has abruptly removed the access to the Claude Explains section of the website by modifying each hosted file at this time stamp:
 
 ```
 <!-- Last Published: Fri Jun 06 2025 15:31:39 GMT+0000 (Coordinated Universal Time) -->
