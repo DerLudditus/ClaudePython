@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><title>How to create a function in Python</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&amp;family=Literata:wght@400;700&amp;family=Fira+Code:wght@400;700&amp;display=swap" rel="stylesheet" type="text/css" />
+  <link href="styles.css" rel="stylesheet" type="text/css" />
+</head><body id="top">
+  <script src="script.js"></script>
+<h1><a href="index.html">How to create a function in Python</a></h1><div><div><div><p>Functions in Python let you write reusable blocks of code that perform specific tasks. They help break down complex programs into manageable pieces, improve code organization, and follow the DRY (Don't Repeat Yourself) principle.</p><p>This guide covers essential techniques for creating robust Python functions, with practical examples and debugging tips created using <a href="https://claude.ai/">Claude</a>, an AI assistant built by Anthropic.</p><h2>Basic function definition with <code>def</code></h2><pre><code>def greet():
+    print(&quot;Hello, World!&quot;)
+    
+greet()  # Call the function</code></pre><pre><code>Hello, World!</code></pre><p>The <code>def</code> keyword creates a function definition in Python, establishing a reusable code block that you can call multiple times. This example demonstrates a simple function named <code>greet()</code> that outputs a greeting message.</p><p>Functions provide several key benefits for code organization and maintenance:</p><ul><li>They encapsulate related code into logical units</li><li>They reduce code duplication by making functionality reusable</li><li>They improve readability by breaking complex operations into named components</li></ul><p>When Python encounters the <code>def</code> statement, it creates a function object and assigns it to the specified name. The indented code block beneath defines what the function will do when called.</p><h2>Function parameters and return values</h2><p>Functions become more powerful when they can receive input data, work with default values, and handle flexible argument structures through <code>*args</code> and <code>**kwargs</code>.</p><h3>Using parameters to pass data to functions</h3><pre><code>def add_numbers(a, b):
+    return a + b
+    
+result = add_numbers(5, 3)
+print(f&quot;The sum is: {result}&quot;)</code></pre><pre><code>The sum is: 8</code></pre><p>The <code>add_numbers()</code> function demonstrates how parameters enable functions to work with input data. When you call the function with <code>add_numbers(5, 3)</code>, Python passes these values to the parameters <code>a</code> and <code>b</code> in the function definition.</p><ul><li>The function takes two parameters that represent the numbers to add</li><li>The <code>return</code> statement sends the calculated sum back to where the function was called</li><li>The returned value gets stored in the <code>result</code> variable for later use</li></ul><p>This pattern of passing data in, processing it, and returning results forms the foundation for writing flexible, reusable functions. You can call the same function with different values to perform the same operation on various inputs.</p><h3>Using default parameter values</h3><pre><code>def greet_person(name, greeting=&quot;Hello&quot;):
+    return f&quot;{greeting}, {name}!&quot;
+    
+print(greet_person(&quot;Alice&quot;))
+print(greet_person(&quot;Bob&quot;, &quot;Hi&quot;))</code></pre><pre><code>Hello, Alice!
+Hi, Bob!</code></pre><p>Default parameters let you specify fallback values that Python uses when you don't provide an argument. In <code>greet_person()</code>, the <code>greeting</code> parameter defaults to "Hello" if you omit it when calling the function.</p><ul><li>When calling <code>greet_person("Alice")</code>, Python uses the default greeting "Hello"</li><li>For <code>greet_person("Bob", "Hi")</code>, the explicit "Hi" argument overrides the default</li><li>Default values make functions more flexible while maintaining backward compatibility</li></ul><p>You can set defaults for any parameter. However, parameters with default values must come after parameters without defaults in the function definition. This design choice helps Python avoid ambiguity when matching arguments to parameters.</p><h3>Working with <code>*args</code> and <code>**kwargs</code></h3><pre><code>def process_data(*args, **kwargs):
+    print(f&quot;Positional arguments: {args}&quot;)
+    print(f&quot;Keyword arguments: {kwargs}&quot;)
+    
+process_data(1, 2, 3, name=&quot;Alice&quot;, age=30)</code></pre><pre><code>Positional arguments: (1, 2, 3)
+Keyword arguments: {&#x27;name&#x27;: &#x27;Alice&#x27;, &#x27;age&#x27;: 30}</code></pre><p>Python's <code>*args</code> and <code>**kwargs</code> syntax enables functions to accept any number of arguments with remarkable flexibility. The <code>*args</code> parameter collects all positional arguments into a tuple, while <code>**kwargs</code> gathers keyword arguments into a dictionary.</p><ul><li>When <code>process_data(1, 2, 3, name="Alice", age=30)</code> runs, <code>*args</code> captures <code>(1, 2, 3)</code> as positional arguments</li><li>The <code>**kwargs</code> parameter simultaneously collects <code>name</code> and <code>age</code> as keyword arguments into a dictionary</li><li>This pattern proves especially useful when building functions that need to handle varying numbers of inputs or pass arguments to other functions</li></ul><p>The asterisk operators (<code>*</code> and <code>**</code>) tell Python to unpack these collections of arguments. This makes your functions more adaptable without requiring fixed parameter counts.</p><h2>Advanced function techniques</h2><p>Building on these foundational concepts, Python offers powerful techniques like <code>lambda</code> functions, decorators, and recursion to write more sophisticated and efficient code.</p><h3>Creating anonymous functions with <code>lambda</code></h3><pre><code>square = lambda x: x ** 2
+numbers = [1, 2, 3, 4, 5]
+squared = list(map(square, numbers))
+print(squared)</code></pre><pre><code>[1, 4, 9, 16, 25]</code></pre><p>Lambda functions create small, anonymous functions in a single line of code. The example shows a <code>lambda</code> that takes one parameter <code>x</code> and returns its square using the power operator <code>**</code>.</p><ul><li>The <code>lambda</code> syntax eliminates the need for a formal <code>def</code> statement when you need a simple function</li><li>The <code>map()</code> function applies our <code>square</code> lambda to each number in the list</li><li>Converting the map result to a list produces the final squared values</li></ul><p>While lambdas work well for simple operations, they should only contain a single expression. Use regular functions for more complex logic that requires multiple lines or statements.</p><h3>Implementing function decorators</h3><pre><code>def my_decorator(func):
+    def wrapper():
+        print(&quot;Before function call&quot;)
+        func()
+        print(&quot;After function call&quot;)
+    return wrapper
+
+@my_decorator
+def say_hello():
+    print(&quot;Hello!&quot;)
+    
+say_hello()</code></pre><pre><code>Before function call
+Hello!
+After function call</code></pre><p>Decorators modify or enhance functions without changing their source code. The <code>@my_decorator</code> syntax wraps the <code>say_hello()</code> function inside the <code>wrapper()</code> function, enabling you to execute code before and after the original function runs.</p><ul><li>The decorator function <code>my_decorator</code> takes a function as input and returns a new function that adds functionality</li><li>When Python sees <code>@my_decorator</code>, it automatically passes <code>say_hello</code> as an argument to <code>my_decorator</code></li><li>The <code>wrapper()</code> function provides a clean way to extend behavior while maintaining the original function's integrity</li></ul><p>This pattern proves especially useful for adding logging, performance monitoring, or access control to multiple functions without duplicating code. You'll often encounter decorators in web frameworks and testing tools.</p><h3>Creating recursive functions</h3><pre><code>def factorial(n):
+    if n &lt;= 1:
+        return 1
+    else:
+        return n * factorial(n-1)
+
+print(f&quot;5! = {factorial(5)}&quot;)</code></pre><pre><code>5! = 120</code></pre><p>Recursive functions solve problems by calling themselves with modified inputs. The <code>factorial()</code> function demonstrates this elegant approach by calculating the product of a number and all positive integers below it.</p><ul><li>The <code>if n <= 1</code> statement serves as the base case. It stops the recursion when <code>n</code> reaches 1, preventing infinite loops</li><li>Each recursive call multiplies the current number <code>n</code> with <code>factorial(n-1)</code>. This breaks down the calculation into smaller, manageable steps</li><li>When calculating <code>factorial(5)</code>, the function creates a chain of operations: 5 * 4 * 3 * 2 * 1</li></ul><p>While recursion offers an intuitive solution for mathematical operations like factorials, it can consume more memory than iterative approaches. Consider your specific use case when choosing between recursive and loop-based implementations.</p><h3>Processing data with functions and multiple return values</h3><p>Python functions can return multiple values in a single statement, enabling efficient data analysis through tuple packing and unpacking—as demonstrated in this temperature processing example.</p><pre><code>def analyze_temperatures(temperatures):
+    avg = sum(temperatures) / len(temperatures)
+    highest = max(temperatures)
+    lowest = min(temperatures)
+    return avg, highest, lowest
+
+daily_temps = [72, 65, 78, 80, 68, 74, 77]
+avg_temp, max_temp, min_temp = analyze_temperatures(daily_temps)
+print(f&quot;Average: {avg_temp:.1f}°F, Highest: {max_temp}°F, Lowest: {min_temp}°F&quot;)</code></pre><p>The <code>analyze_temperatures</code> function processes a list of temperature readings and returns three key metrics in a single line. It calculates the average using <code>sum()</code> divided by <code>len()</code>, while <code>max()</code> and <code>min()</code> identify the highest and lowest values.</p><p>Python's tuple unpacking shines in this example. When the function returns multiple values separated by commas, you can assign them directly to separate variables. The f-string formats the output with a single decimal place for the average temperature using <code>.1f</code>.</p><ul><li>Takes a list of temperatures as input</li><li>Returns three values: average, maximum, minimum</li><li>Uses built-in Python functions for efficient calculations</li></ul><h3>Creating a function-based calculator with <code>lambda</code> and dictionaries</h3><p>This example combines <code>lambda</code> functions with a dictionary to create a flexible calculator that performs basic arithmetic operations through a clean, maintainable interface.</p><pre><code>def calculate(operation, a, b):
+    operations = {
+        &#x27;add&#x27;: lambda x, y: x + y,
+        &#x27;subtract&#x27;: lambda x, y: x - y,
+        &#x27;multiply&#x27;: lambda x, y: x * y,
+        &#x27;divide&#x27;: lambda x, y: x / y if y != 0 else &quot;Error: Division by zero&quot;
+    }
+    
+    if operation in operations:
+        return operations[operation](a, b)
+    return &quot;Unknown operation&quot;
+
+print(calculate(&#x27;add&#x27;, 10, 5))
+print(calculate(&#x27;multiply&#x27;, 3, 4))
+print(calculate(&#x27;divide&#x27;, 8, 2))</code></pre><p>The <code>calculate()</code> function implements a flexible calculator using a dictionary to store mathematical operations. Each operation maps to a <code>lambda</code> function that performs the calculation. When you call <code>calculate('add', 10, 5)</code>, it looks up the 'add' operation in the dictionary and executes the corresponding lambda with the provided numbers.</p><ul><li>The dictionary approach eliminates the need for multiple if/else statements</li><li>Each lambda function concisely defines the mathematical operation in a single line</li><li>The function handles division by zero gracefully by returning an error message</li></ul><p>If you pass an operation that doesn't exist in the dictionary, the function returns "Unknown operation" instead of raising an error. This makes the function more robust and user-friendly.</p><h2>Common errors and challenges</h2><p>Python functions can trigger subtle bugs through scope confusion, mutable defaults, and recursive depth limits. Understanding these pitfalls helps you write more reliable code.</p><h3>Avoiding variable scope issues with the <code>global</code> keyword</h3><p>Variable scope issues commonly trip up Python developers when modifying global variables inside functions. The following code demonstrates a classic <code>UnboundLocalError</code> that occurs when trying to modify the global <code>total</code> variable without properly declaring it.</p><pre><code>total = 0
+
+def add_to_total(value):
+    total = total + value
+    return total
+
+print(add_to_total(5))</code></pre><p>Python interprets <code>total = total + value</code> as creating a new local variable instead of modifying the global one. This triggers an error because the function tries to use <code>total</code> before assigning it. Check out the corrected version below.</p><pre><code>total = 0
+
+def add_to_total(value):
+    global total
+    total = total + value
+    return total
+
+print(add_to_total(5))</code></pre><p>The <code>global</code> keyword explicitly tells Python to use the variable from the global scope instead of creating a new local one. Without it, Python assumes you want to create a local variable when you assign a value, even if a global variable exists with the same name.</p><ul><li>Watch for this issue when modifying global variables inside functions</li><li>Consider using return values and parameters instead of global variables for cleaner code</li><li>The error typically appears as <code>UnboundLocalError</code> when you try to read a global variable before assigning it locally</li></ul><p>While the <code>global</code> keyword fixes the immediate problem, it's often better to avoid global variables altogether. They can make code harder to understand and maintain.</p><h3>Avoiding unexpected behavior with mutable default arguments like <code>[]</code> and <code>{}</code></h3><p>Python's mutable default arguments can create confusing behavior when you reuse functions. The default list or dictionary persists between function calls instead of creating a fresh instance each time. This code demonstrates a common trap with list defaults.</p><pre><code>def add_item(item, items=[]):
+    items.append(item)
+    return items
+
+print(add_item(&quot;apple&quot;))
+print(add_item(&quot;banana&quot;))</code></pre><p>The <code>add_item()</code> function creates a single list object when Python defines the function. Each call modifies this same list instead of creating a new one. The code below demonstrates the proper way to handle mutable default arguments.</p><pre><code>def add_item(item, items=None):
+    if items is None:
+        items = []
+    items.append(item)
+    return items
+
+print(add_item(&quot;apple&quot;))
+print(add_item(&quot;banana&quot;))</code></pre><p>Using <code>None</code> as the default argument and creating a new list inside the function solves the mutable default argument problem. This approach ensures each function call starts with a fresh list instead of reusing the same one.</p><ul><li>Watch for this issue when using lists, dictionaries, or sets as default arguments</li><li>The problem occurs because Python evaluates default arguments only once during function definition</li><li>Always initialize mutable defaults to <code>None</code> and create the actual data structure inside the function</li></ul><p>This pattern works especially well for functions that need to maintain separate state for each call. It prevents unexpected behavior where data from previous calls affects current operations.</p><h3>Preventing stack overflow with function memoization in recursive calls</h3><p>Recursive functions can quickly consume memory and processing power when handling large inputs. The classic <code>fibonacci()</code> implementation demonstrates this limitation. Each recursive call creates new stack frames that accumulate until Python hits its recursion limit or runs out of memory.</p><pre><code>def fibonacci(n):
+    if n &lt;= 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(35))</code></pre><p>The <code>fibonacci()</code> function recalculates the same values repeatedly. For example, computing <code>fibonacci(5)</code> calculates <code>fibonacci(2)</code> three separate times. This redundancy creates exponential time complexity and slows down the program significantly.</p><p>The optimized version below demonstrates how to cache previously calculated values.</p><pre><code>def fibonacci(n, memo=None):
+    if memo is None:
+        memo = {}
+    if n in memo:
+        return memo[n]
+    if n &lt;= 0:
+        return 0
+    elif n == 1:
+        return 1
+    memo[n] = fibonacci(n-1, memo) + fibonacci(n-2, memo)
+    return memo[n]
+
+print(fibonacci(35))</code></pre><p>The optimized <code>fibonacci()</code> function uses memoization to store previously calculated values in a dictionary. This caching technique prevents redundant calculations by checking if a value exists in the memo before computing it again. The <code>memo</code> dictionary persists between recursive calls through the function parameter.</p><ul><li>Watch for performance issues in recursive functions that compute the same values multiple times</li><li>Consider using memoization when your recursive function has overlapping subproblems</li><li>The time complexity improves from exponential to linear with this optimization</li></ul><p>This pattern works particularly well for mathematical sequences and dynamic programming problems where values depend on previous results.</p></div></div></div><h2>FAQs</h2><div><div><h3>What is the basic syntax for defining a function in Python?</h3><div><div><div><p>Python functions start with the <code>def</code> keyword, followed by your chosen function name and parentheses containing any parameters. The function body uses indentation to show which code belongs to the function.</p><p>A simple function looks like this: <code>def greet(name):</code> followed by indented code. The colon signals the start of the function body. Python uses this clear syntax to make functions readable and maintainable.</p></div></div></div></div></div><div><div><h3>How do you call a function after it&#x27;s been defined?</h3><div><div><div><p>To call a function after defining it, simply write the function's name followed by parentheses: <code>myFunction()</code>. The parentheses tell JavaScript to execute the function rather than just reference it. You can pass data into the function by adding arguments between the parentheses: <code>myFunction("hello")</code>.</p><p>Functions work this way because they're first-class objects in JavaScript. This means you can store them in variables, pass them as arguments, or return them from other functions—giving you powerful ways to structure your code.</p></div></div></div></div></div><div><div><h3>What&#x27;s the difference between parameters and arguments in Python functions?</h3><div><div><div><p>Parameters act as placeholders in function definitions, like <code>def greet(name)</code> where <code>name</code> is the parameter. Arguments are the actual values you pass when calling the function, such as <code>greet("Alice")</code>. Think of parameters as variables that outline what a function expects—arguments fill those variables with real data when the function runs.</p><p>This distinction matters because parameters define a function's interface while arguments provide the concrete input that makes the function do its work. Parameters create flexibility by letting you write reusable functions that can handle different inputs.</p></div></div></div></div></div><div><div><h3>How do you make a function return a value using the &#x27;return&#x27; statement?</h3><div><div><div><p>Functions return values to their caller using the <code>return</code> statement, which immediately exits the function and sends back the specified value. When you write <code>return x</code>, the function packages up that value and passes it back to wherever the function was called from.</p><ul><li>The returned value can be any data type: numbers, strings, objects, or even other functions</li><li>You can store the returned value in a variable or use it directly in other operations</li><li>A function stops executing as soon as it hits a <code>return</code> statement</li></ul></div></div></div></div></div><div><div><h3>Can you create a function without any parameters or return values?</h3><div><div><div><p>Yes, you can create a function without parameters or return values. In Python, you'd define it using <code>def function_name():</code> followed by the function body. These functions, often called procedures, perform actions like printing output or modifying global variables without explicitly returning data.</p><p>While possible, parameterless functions with no return values limit reusability and make testing harder. They work best for simple, self-contained tasks that don't need external inputs or produce specific outputs.</p></div></div></div></div></div></body></html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><title>How to create a class in Python</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&amp;family=Literata:wght@400;700&amp;family=Fira+Code:wght@400;700&amp;display=swap" rel="stylesheet" type="text/css" />
+  <link href="styles.css" rel="stylesheet" type="text/css" />
+</head><body id="top">
+  <script src="script.js"></script>
+<h1><a href="index.html">How to create a class in Python</a></h1><div><div><div><p>Python classes provide a powerful way to create reusable code by bundling data and functionality together. Classes serve as blueprints for objects, enabling you to structure your code efficiently while following object-oriented programming principles.</p><p>This guide covers essential techniques for creating robust Python classes, with practical examples and debugging tips created using <a href="https://claude.ai/">Claude</a>, an AI assistant built by Anthropic.</p><h2>Basic class definition</h2><pre><code>class Car:
+    pass
+
+my_car = Car()
+print(type(my_car))</code></pre><pre><code>&lt;class &#x27;__main__.Car&#x27;&gt;</code></pre><p>The <code>class Car</code> definition demonstrates the minimal structure needed to create a custom class in Python. The <code>pass</code> statement serves as a placeholder, allowing you to establish the basic framework before adding attributes and methods.</p><p>When you instantiate the class with <code>my_car = Car()</code>, Python creates a new object based on this blueprint. While this example is intentionally simple, it illustrates two core concepts:</p><ul><li>Classes don't require initial attributes or methods to be valid</li><li>Each instance maintains its own identity, as shown by the output indicating it's a unique object of type <code>Car</code></li></ul><h2>Basic class features</h2><p>Building on this foundation, we'll explore how to enhance Python classes with attributes, methods, and the <code>__init__</code> constructor to create more sophisticated and functional objects.</p><h3>Class with attributes</h3><pre><code>class Car:
+    color = &quot;red&quot;
+    wheels = 4
+
+my_car = Car()
+print(f&quot;My car is {my_car.color} and has {my_car.wheels} wheels.&quot;)</code></pre><pre><code>My car is red and has 4 wheels.</code></pre><p>This example demonstrates class attributes, which belong to the class itself rather than individual instances. The attributes <code>color</code> and <code>wheels</code> are defined directly within the class body, making them accessible to all instances of <code>Car</code>.</p><ul><li>Class attributes serve as default values that all instances inherit when created</li><li>You can access these attributes using dot notation (<code>my_car.color</code>) on any instance</li><li>These attributes exist even before creating any instances of the class</li></ul><p>While this approach works for simple cases, instance attributes (defined in <code>__init__</code>) often provide more flexibility for real-world applications. We'll explore those next.</p><h3>Class with methods</h3><pre><code>class Car:
+    def drive(self):
+        return &quot;The car is moving!&quot;
+    
+    def stop(self):
+        return &quot;The car has stopped.&quot;
+
+my_car = Car()
+print(my_car.drive())
+print(my_car.stop())</code></pre><pre><code>The car is moving!
+The car has stopped.</code></pre><p>Methods define the behaviors and actions that objects of a class can perform. In this example, the <code>Car</code> class has two methods: <code>drive()</code> and <code>stop()</code>. Each method takes <code>self</code> as its first parameter, which refers to the instance of the class being used.</p><ul><li>The <code>self</code> parameter enables methods to access and modify the instance's attributes and other methods</li><li>You call methods using dot notation on class instances (<code>my_car.drive()</code>)</li><li>Methods can return values, perform actions, or both</li></ul><p>When you create a new car object with <code>my_car = Car()</code>, it inherits all these defined behaviors. You can then call these methods to make the car move or stop, demonstrating how classes bundle related functionality together.</p><h3>Using the <code>__init__</code> constructor</h3><pre><code>class Car:
+    def __init__(self, color, model):
+        self.color = color
+        self.model = model
+
+my_car = Car(&quot;blue&quot;, &quot;sedan&quot;)
+print(f&quot;I have a {my_car.color} {my_car.model}.&quot;)</code></pre><pre><code>I have a blue sedan.</code></pre><p>The <code>__init__</code> method serves as a constructor that automatically runs when you create a new instance of a class. It enables you to set up initial instance attributes that are unique to each object.</p><ul><li>The parameters <code>color</code> and <code>model</code> let you customize each car's properties when creating it</li><li>Using <code>self.color = color</code> creates instance attributes that belong specifically to each car object</li><li>Instance attributes differ from class attributes because each object can have different values</li></ul><p>When you write <code>my_car = Car("blue", "sedan")</code>, Python passes these arguments to <code>__init__</code> to initialize your new car object with those specific characteristics. This approach provides more flexibility than using fixed class attributes.</p><h2>Advanced class concepts</h2><p>Building on these foundational class concepts, Python offers powerful mechanisms to extend and refine your classes through inheritance, property decorators, and specialized method types.</p><h3>Class inheritance</h3><pre><code>class Vehicle:
+    def move(self):
+        return &quot;Moving...&quot;
+
+class Car(Vehicle):
+    def honk(self):
+        return &quot;Beep beep!&quot;
+
+my_car = Car()
+print(my_car.move())  # Inherited method
+print(my_car.honk())  # Car-specific method</code></pre><pre><code>Moving...
+Beep beep!</code></pre><p>Inheritance enables a class to acquire properties and methods from another class. In this example, <code>Car</code> inherits from <code>Vehicle</code> using the syntax <code>class Car(Vehicle)</code>, establishing <code>Vehicle</code> as the parent class and <code>Car</code> as the child class.</p><ul><li>The <code>Car</code> class automatically gains access to the <code>move()</code> method from <code>Vehicle</code></li><li>Child classes can define their own unique methods. Here, <code>honk()</code> exists only in <code>Car</code></li><li>When you create a <code>Car</code> instance, you can use both inherited and class-specific methods seamlessly</li></ul><p>This hierarchical relationship promotes code reuse and logical organization. Common functionality lives in the parent class while specialized behaviors reside in child classes.</p><h3>Using properties with getters and setters</h3><pre><code>class Circle:
+    def __init__(self, radius):
+        self._radius = radius
+    
+    @property
+    def radius(self):
+        return self._radius
+    
+    @radius.setter
+    def radius(self, value):
+        if value &gt; 0:
+            self._radius = value
+
+circle = Circle(5)
+print(f&quot;Radius: {circle.radius}&quot;)
+circle.radius = 10
+print(f&quot;New radius: {circle.radius}&quot;)</code></pre><pre><code>Radius: 5
+New radius: 10</code></pre><p>Properties provide controlled access to class attributes through getter and setter methods. The <code>@property</code> decorator transforms the <code>radius</code> method into a getter that retrieves the private <code>_radius</code> attribute. The <code>@radius.setter</code> decorator enables you to modify this value with built-in validation.</p><ul><li>The underscore prefix in <code>_radius</code> signals that this attribute should be treated as private</li><li>You can access the radius like a regular attribute (<code>circle.radius</code>) instead of calling methods directly</li><li>The setter validates input by only accepting positive values for the radius</li></ul><p>This pattern helps maintain data integrity while providing a clean, intuitive interface for working with class attributes. Properties strike an elegant balance between direct attribute access and the control of getter/setter methods.</p><h3>Static and class methods</h3><pre><code>class MathOperations:
+    @staticmethod
+    def add(x, y):
+        return x + y
+    
+    @classmethod
+    def multiply(cls, x, y):
+        return x * y
+
+print(f&quot;5 + 3 = {MathOperations.add(5, 3)}&quot;)
+print(f&quot;5 * 3 = {MathOperations.multiply(5, 3)}&quot;)</code></pre><pre><code>5 + 3 = 8
+5 * 3 = 15</code></pre><p>Static and class methods provide ways to associate functions with a class without requiring an instance. The <code>@staticmethod</code> decorator creates utility functions that don't need access to class or instance attributes. The <code>@classmethod</code> decorator enables methods that can access and modify class state through the <code>cls</code> parameter.</p><ul><li>Static methods like <code>add()</code> work as standalone functions. They don't receive any automatic first parameter</li><li>Class methods like <code>multiply()</code> automatically receive the class itself as the first parameter (<code>cls</code>)</li><li>You can call both types directly on the class (<code>MathOperations.add(5, 3)</code>) without creating an instance</li></ul><p>These methods help organize code logically within a class structure while maintaining clean separation from instance-specific behaviors. They're particularly useful for operations that conceptually belong to a class but don't need instance data.</p><h3>Creating a bank account class with <code>deposit()</code> and <code>withdraw()</code> methods</h3><p>The <code>BankAccount</code> class demonstrates how to model financial transactions by tracking an account owner's balance and providing secure methods for deposits and withdrawals.</p><pre><code>class BankAccount:
+    def __init__(self, owner, balance=0):
+        self.owner = owner
+        self.balance = balance
+    
+    def deposit(self, amount):
+        self.balance += amount
+        return f&quot;Deposited ${amount}. New balance: ${self.balance}&quot;
+    
+    def withdraw(self, amount):
+        if amount &lt;= self.balance:
+            self.balance -= amount
+            return f&quot;Withdrew ${amount}. New balance: ${self.balance}&quot;
+        return &quot;Insufficient funds!&quot;
+
+account = BankAccount(&quot;Alice&quot;, 100)
+print(account.deposit(50))
+print(account.withdraw(25))
+print(account.withdraw(200))</code></pre><p>The <code>BankAccount</code> class implements core banking operations through a clean, object-oriented design. The constructor takes an owner's name and an optional starting balance, storing them as instance attributes.</p><ul><li>The <code>deposit()</code> method adds funds and returns a confirmation message with the new balance</li><li>The <code>withdraw()</code> method includes a safety check to prevent overdrafts</li><li>String formatting with f-strings provides clear transaction feedback</li></ul><p>The example code creates an account for Alice with $100, performs a $50 deposit and a $25 withdrawal successfully. The final withdrawal attempt of $200 fails due to insufficient funds, demonstrating the built-in account protection.</p><h3>Building a simple inventory system with product <code>inheritance</code></h3><p>The <code>Product</code> and <code>DiscountedProduct</code> classes demonstrate inheritance in action by modeling a flexible inventory system that handles both regular and discounted items through a shared base class structure.</p><pre><code>class Product:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+class DiscountedProduct(Product):
+    def __init__(self, name, price, discount_percent):
+        super().__init__(name, price)
+        self.discount_percent = discount_percent
+    
+    def get_final_price(self):
+        return self.price * (1 - self.discount_percent / 100)
+
+regular_product = Product(&quot;Laptop&quot;, 1000)
+print(f&quot;{regular_product.name}: ${regular_product.price}&quot;)
+discounted_product = DiscountedProduct(&quot;Headphones&quot;, 100, 20)
+print(f&quot;{discounted_product.name}: ${discounted_product.get_final_price()}&quot;)</code></pre><p>This code demonstrates class inheritance in action. The base <code>Product</code> class defines core attributes like name and price. The <code>DiscountedProduct</code> class extends this functionality by inheriting from <code>Product</code> and adding discount calculations.</p><ul><li>The <code>super().__init__()</code> call ensures proper initialization of parent class attributes</li><li>The <code>get_final_price()</code> method calculates the discounted amount using a percentage reduction formula</li></ul><p>The example creates two products: a regular laptop at full price and headphones with a 20% discount. The <code>DiscountedProduct</code> maintains all the basic product features while adding specialized pricing behavior. This pattern enables flexible handling of different product types through a unified interface.</p><h2>Common errors and challenges</h2><p>Understanding these common Python class pitfalls will help you write more reliable code and avoid frustrating debugging sessions.</p><h3>Forgetting the <code>self</code> parameter in class methods</h3><p>One of the most frequent mistakes when writing Python class methods involves omitting the <code>self</code> parameter. This critical error occurs when developers define instance methods without including <code>self</code> as the first parameter. The following code demonstrates this common pitfall.</p><pre><code>class Calculator:
+    def add(x, y):  # Missing &#x27;self&#x27; parameter
+        return x + y
+
+calc = Calculator()
+result = calc.add(5, 3)  # This will cause a TypeError
+print(result)</code></pre><p>When Python calls the <code>add</code> method, it automatically passes the instance as the first argument. Without <code>self</code>, Python can't bind the method to the instance, causing a <code>TypeError</code>. Let's examine the corrected version below.</p><pre><code>class Calculator:
+    def add(self, x, y):  # Added &#x27;self&#x27; parameter
+        return x + y
+
+calc = Calculator()
+result = calc.add(5, 3)  # Now works correctly
+print(result)</code></pre><p>The corrected version properly includes <code>self</code> as the first parameter in the <code>add</code> method. This enables Python to automatically pass the instance reference when calling instance methods. Without <code>self</code>, Python raises a <code>TypeError</code> because it can't bind the method to the instance object.</p><ul><li>Always include <code>self</code> as the first parameter for instance methods</li><li>Static and class methods are exceptions that use different decorators</li><li>Your IDE can help catch missing <code>self</code> parameters before runtime</li></ul><p>This error commonly surfaces when converting standalone functions into class methods. Double-check method signatures during refactoring to ensure proper instance binding.</p><h3>Mixing up instance and class variables</h3><p>Developers often confuse class variables (shared across all instances) with instance variables (unique to each object). This distinction becomes critical when modifying values, as class variables can produce unexpected behavior. The code below demonstrates a common pitfall with the <code>count</code> variable.</p><pre><code>class Counter:
+    count = 0  # Class variable shared by all instances
+    
+    def increment(self):
+        self.count += 1
+
+c1 = Counter()
+c2 = Counter()
+c1.increment()
+print(f&quot;c1: {c1.count}, c2: {c2.count}&quot;)  # c1: 1, c2: 0 (unexpected)</code></pre><p>The <code>increment()</code> method attempts to modify <code>count</code> using <code>self.count</code>. This creates a new instance variable instead of updating the shared class variable. The following code demonstrates the proper implementation.</p><pre><code>class Counter:
+    def __init__(self):
+        self.count = 0  # Instance variable unique to each instance
+    
+    def increment(self):
+        self.count += 1
+
+c1 = Counter()
+c2 = Counter()
+c1.increment()
+print(f&quot;c1: {c1.count}, c2: {c2.count}&quot;)  # c1: 1, c2: 0 (expected)</code></pre><p>The corrected code initializes <code>count</code> as an instance variable in <code>__init__</code> instead of defining it as a class variable. This ensures each <code>Counter</code> object maintains its own independent count. When you increment <code>c1</code>'s count, <code>c2</code>'s count remains unchanged—exactly what you'd expect for separate counters.</p><ul><li>Watch for mutable class variables like lists or dictionaries. They can cause unexpected behavior when modified</li><li>Use instance variables for data that should be unique to each object</li><li>Reserve class variables for truly shared values that all instances should reference</li></ul><h3>Incorrect use of <code>super()</code> in inheritance</h3><p>Failing to properly call <code>super().__init__()</code> in child classes creates a common inheritance trap. When a child class overrides the parent's <code>__init__</code> method without invoking the parent initialization, it breaks the inheritance chain and prevents access to parent attributes.</p><pre><code>class Vehicle:
+    def __init__(self, brand):
+        self.brand = brand
+
+class Car(Vehicle):
+    def __init__(self, brand, model):
+        self.model = model  # Missing super().__init__() call
+
+my_car = Car(&quot;Toyota&quot;, &quot;Corolla&quot;)
+print(f&quot;Brand: {my_car.brand}&quot;)  # AttributeError: no attribute &#x27;brand&#x27;</code></pre><p>The <code>Car</code> class fails to initialize its parent class attributes by skipping <code>super().__init__()</code>. This prevents the <code>brand</code> attribute from being set during object creation. The code below demonstrates the proper implementation with inheritance.</p><pre><code>class Vehicle:
+    def __init__(self, brand):
+        self.brand = brand
+
+class Car(Vehicle):
+    def __init__(self, brand, model):
+        super().__init__(brand)  # Call parent constructor
+        self.model = model
+
+my_car = Car(&quot;Toyota&quot;, &quot;Corolla&quot;)
+print(f&quot;Brand: {my_car.brand}&quot;)  # Works correctly: &quot;Toyota&quot;</code></pre><p>The corrected code properly initializes parent class attributes by calling <code>super().__init__()</code> in the child class constructor. This ensures the <code>brand</code> attribute gets set during object creation. Without this call, the child class would lose access to parent class attributes.</p><ul><li>Always call <code>super().__init__()</code> when overriding parent class constructors</li><li>Place the <code>super()</code> call before initializing child-specific attributes</li><li>Watch for missing parent initialization when debugging attribute access errors</li></ul><p>This pattern becomes especially important in complex inheritance hierarchies with multiple parent classes. Modern IDEs can help catch missing <code>super()</code> calls during development.</p></div></div></div><h2>FAQs</h2><div><div><h3>What is the basic syntax for defining a class in Python?</h3><div><div><div><p>Python classes start with the <code>class</code> keyword followed by the class name and a colon. The class body uses indentation to group its contents. Inside, you'll define methods—special functions that belong to the class—starting with <code>def</code>. The <code>__init__</code> method initializes new objects with their starting attributes.</p><ul><li>Every class method's first parameter is traditionally named <code>self</code>. This parameter refers to the specific instance being created or modified.</li><li>Class attributes belong to the class itself. Instance attributes belong to individual objects created from the class.</li></ul></div></div></div></div></div><div><div><h3>How do you create an instance of a class after defining it?</h3><div><div><div><p>Creating a class instance requires the <code>new</code> keyword followed by the class name and parentheses. The <code>new</code> operator constructs a fresh object, sets up its memory space, and calls the class constructor to initialize properties.</p><ul><li>The constructor runs automatically when you create an instance</li><li>Each instance maintains its own separate copy of properties</li><li>You can create multiple unique instances from the same class blueprint</li></ul><p>This approach enables you to build reusable templates for objects while keeping their data independent. The class serves as the blueprint—the instance represents a concrete object built from that plan.</p></div></div></div></div></div><div><div><h3>What is the purpose of the __init__() method in a Python class?</h3><div><div><div><p>The <code>__init__()</code> method serves as a constructor in Python classes. It automatically runs when you create a new instance of a class—setting up the initial state and attributes that object will need. Think of it as preparing a new car before its first drive: you'll want to set the fuel level, check the engine, and configure basic settings.</p><p>This special method lets you define required parameters and establish default values that every instance of your class should have. Python calls <code>__init__()</code> behind the scenes, ensuring each object starts life with the proper setup.</p></div></div></div></div></div><div><div><h3>How do you add methods to a class besides the constructor?</h3><div><div><div><p>Methods in a class work like specialized functions that can access and modify the class's data. You add them by defining functions inside the class body, after the <code>constructor</code>. Each method automatically receives <code>this</code> as its first parameter, letting it reference the specific instance's properties.</p><ul><li>Instance methods go directly in the class definition and can access instance data through <code>this</code></li><li>Static methods use the <code>static</code> keyword and operate independently of any instance</li></ul><p>This structure enables you to create reusable behaviors that work with the object's internal state while maintaining clean separation between different functionality.</p></div></div></div></div></div><div><div><h3>What is the difference between class attributes and instance attributes?</h3><div><div><div><p>Class attributes belong to the class itself and maintain the same value across all instances, while instance attributes belong to specific objects. When you define a class attribute with <code>class_name.attribute</code>, Python creates a single shared value. Instance attributes, declared with <code>self.attribute</code>, create unique values for each object.</p><ul><li>Class attributes efficiently store data that should be consistent across all instances</li><li>Instance attributes enable each object to maintain its own state independently</li><li>Python first checks instance attributes before falling back to class attributes when accessing values</li></ul></div></div></div></div></div></body></html>
